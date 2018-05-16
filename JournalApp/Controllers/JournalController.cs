@@ -28,6 +28,7 @@ namespace JournalApp.Controllers
 			return Ok(rowsAffected);
 		}
 
+		[Authorize(Policy = "ApiUser")]
 		[HttpGet]
 		public IActionResult GetAllJournalsForUser([FromRoute] int userId)
 		{
