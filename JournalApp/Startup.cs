@@ -36,7 +36,6 @@ namespace JournalApp
 				app.UseDeveloperExceptionPage();
 			}
 
-			app.UseCors("AllowAllHeaders");
 			app.UseAuthentication();
 			app.UseMvc();
 		}
@@ -44,14 +43,15 @@ namespace JournalApp
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// Add framework services.
+			// Get options from app settings
+			var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
+
+			#region Dependency Injections - Controller
+
 			services.AddDbContext<ApplicationDbContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
 					b => b.MigrationsAssembly("JournalApp")));
 
-			// Get options from app settings
-			var jwtAppSettingOptions = Configuration.GetSection(nameof(JwtIssuerOptions));
-			// Configure JwtIssuerOptions
 			services.Configure<JwtIssuerOptions>(options =>
 			{
 				options.Issuer = jwtAppSettingOptions[nameof(JwtIssuerOptions.Issuer)];
@@ -59,6 +59,28 @@ namespace JournalApp
 				options.SigningCredentials = new SigningCredentials(_signingKey, SecurityAlgorithms.HmacSha256);
 			});
 
+			// add identity
+			var builder = services.AddIdentityCore<AppUser>(o =>
+			{
+				// configure identity options
+				o.Password.RequireDigit = false;
+				o.Password.RequireLowercase = false;
+				o.Password.RequireUppercase = false;
+				o.Password.RequireNonAlphanumeric = false;
+				o.Password.RequiredLength = 6;
+			});
+
+			builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
+			builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+
+			services.AddSingleton<IJwtFactory, JwtFactory>();
+			services.AddSingleton<IConfiguration>(Configuration);
+
+			#endregion DEPENDENCY INJECTIONS - Controller
+
+			#region Authentication settings
+
+			// This is how we know what a valid auth token is!
 			var tokenValidationParameters = new TokenValidationParameters
 			{
 				ValidateIssuer = true,
@@ -86,25 +108,18 @@ namespace JournalApp
 				configureOptions.SaveToken = true;
 			});
 
-			// api user claim policy
+			#endregion Authentication settings
+
+			#region Policies
+
 			services.AddAuthorization(options =>
 			{
 				options.AddPolicy("ApiUser", policy => policy.RequireClaim("rol", "api_access"));
 			});
 
-			// add identity
-			var builder = services.AddIdentityCore<AppUser>(o =>
-			{
-				// configure identity options
-				o.Password.RequireDigit = false;
-				o.Password.RequireLowercase = false;
-				o.Password.RequireUppercase = false;
-				o.Password.RequireNonAlphanumeric = false;
-				o.Password.RequiredLength = 6;
-			});
+			#endregion Policies
 
-			builder = new IdentityBuilder(builder.UserType, typeof(IdentityRole), builder.Services);
-			builder.AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
+			#region CORS settings
 
 			services.AddCors(options =>
 			{
@@ -116,10 +131,11 @@ namespace JournalApp
 							.AllowAnyMethod();
 					});
 			});
-			services.AddSingleton<IJwtFactory, JwtFactory>();
+
+			#endregion CORS settings
+
 			services.AddAutoMapper();
 			services.AddMvc();
-			services.AddSingleton<IConfiguration>(Configuration);
 		}
 	}
 }

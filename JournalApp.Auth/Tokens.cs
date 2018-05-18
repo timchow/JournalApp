@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using JournalApp.Models.Tokens;
 using System.Linq;
 using System.Security.Claims;
-using System.Text;
 using System.Threading.Tasks;
-using JournalApp.Models.Tokens;
-using Newtonsoft.Json;
 
 namespace JournalApp.Auth
 {
 	public class Tokens
 	{
-		public static async Task<object> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions, JsonSerializerSettings serializerSettings)
+		public static async Task<object> GenerateJwt(ClaimsIdentity identity, IJwtFactory jwtFactory, string userName, JwtIssuerOptions jwtOptions)
 		{
 			var response = new
 			{

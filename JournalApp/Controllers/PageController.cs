@@ -1,10 +1,8 @@
 using JournalApp.BLL;
 using JournalApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-
+using System.Collections.Generic;
 
 namespace JournalApp.Controllers
 {
@@ -20,7 +18,7 @@ namespace JournalApp.Controllers
 		public IActionResult Delete([FromRoute]int journalId, [FromRoute]int pageId)
 		{
 			PageService pageService = new PageService(Settings.GetSection("AppSettings").GetSection("DefaultConnectionString").Value);
-			
+
 			int rowsAffected = pageService.DeletePageFromJournal(journalId, pageId);
 
 			return Ok(rowsAffected);
@@ -40,7 +38,7 @@ namespace JournalApp.Controllers
 		}
 
 		[HttpPost("{pageId:int?}")]
-		public IActionResult Post([FromRoute]int journalId,[FromRoute]int pageId,[FromBody]Page page)
+		public IActionResult Post([FromRoute]int journalId, [FromRoute]int pageId, [FromBody]Page page)
 		{
 			PageService pageService = new PageService(Settings.GetSection("AppSettings").GetSection("DefaultConnectionString").Value);
 			int rowsAffected = pageService.UpsertPageForJournal(pageId, journalId, page);

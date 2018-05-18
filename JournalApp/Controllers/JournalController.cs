@@ -1,13 +1,9 @@
 using JournalApp.BLL;
 using JournalApp.Models;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 namespace JournalApp.Controllers
 {
@@ -23,7 +19,7 @@ namespace JournalApp.Controllers
 		public IActionResult Delete([FromRoute]int userId, [FromRoute]int journalId)
 		{
 			JournalService journalService = new JournalService(Settings.GetSection("AppSettings").GetSection("DefaultConnectionString").Value);
-			int rowsAffected = journalService.DeleteJournalForUser(userId,journalId);
+			int rowsAffected = journalService.DeleteJournalForUser(userId, journalId);
 
 			return Ok(rowsAffected);
 		}
@@ -38,8 +34,6 @@ namespace JournalApp.Controllers
 			if (journalList.Count == 0)
 				return NoContent();
 
-			//HttpContext.Authentication.SignOutAsync("Cookies")
-			
 			return Ok(journalList);
 		}
 
@@ -47,8 +41,7 @@ namespace JournalApp.Controllers
 		public IActionResult UpsertJournalForUser([FromRoute]int userId, [FromRoute]int journalId, [FromBody]Journal journal)
 		{
 			JournalService journalService = new JournalService(Settings.GetSection("AppSettings").GetSection("DefaultConnectionString").Value);
-			int rowsAffected = journalService.UpsertJournalForUser(userId,journalId,journal);
-
+			int rowsAffected = journalService.UpsertJournalForUser(userId, journalId, journal);
 
 			return Ok(rowsAffected);
 		}

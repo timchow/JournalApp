@@ -1,28 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using JournalApp.Auth;
+﻿using JournalApp.Auth;
 using JournalApp.Models;
 using JournalApp.Models.FormModels;
 using JournalApp.Models.Tokens;
 using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace JournalApp.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Auth")]
+	[Produces("application/json")]
+	[Route("api/Auth")]
 	public class AuthController : Controller
 	{
-		private readonly UserManager<AppUser> _userManager;
 		private readonly IJwtFactory _jwtFactory;
 		private readonly JwtIssuerOptions _jwtOptions;
+		private readonly UserManager<AppUser> _userManager;
 
 		public AuthController(UserManager<AppUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions)
 		{
@@ -47,7 +42,7 @@ namespace JournalApp.Controllers
 				return BadRequest("Invalid username or password.");
 			}
 
-			var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.UserName, _jwtOptions, new JsonSerializerSettings { Formatting = Formatting.Indented });
+			var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.UserName, _jwtOptions);
 			return new OkObjectResult(jwt);
 		}
 

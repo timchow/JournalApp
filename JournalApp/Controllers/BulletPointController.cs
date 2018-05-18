@@ -1,13 +1,10 @@
-using System;
 using JournalApp.BLL;
+using JournalApp.BLL.Interfaces;
 using JournalApp.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using System.Collections.Generic;
-using System.Net;
-using System.Net.Http;
-using JournalApp.BLL.Interfaces;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
 
 namespace JournalApp.Controllers
 {
@@ -23,7 +20,7 @@ namespace JournalApp.Controllers
 		}
 
 		[HttpDelete("{bulletPointId:int}")]
-		public IActionResult Delete([FromRoute]int pageId,[FromRoute]int bulletPointId)
+		public IActionResult Delete([FromRoute]int pageId, [FromRoute]int bulletPointId)
 		{
 			BulletPointService bulletPointService;
 
@@ -63,7 +60,7 @@ namespace JournalApp.Controllers
 		}
 
 		[HttpPost("{bulletPointId:int?}")]
-		public IActionResult UpsertBulletPointToPage([FromRoute]int pageId,[FromRoute]int bulletPointId,[FromBody]BulletPoint data)
+		public IActionResult UpsertBulletPointToPage([FromRoute]int pageId, [FromRoute]int bulletPointId, [FromBody]BulletPoint data)
 		{
 			BulletPointService bulletPointService = new BulletPointService(Settings.GetSection("AppSettings").GetSection("DefaultConnectionString").Value);
 			bulletPointService.UpsertBulletPointForPage(pageId, bulletPointId, data);
