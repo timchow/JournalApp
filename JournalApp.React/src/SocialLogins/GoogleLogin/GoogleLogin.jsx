@@ -34,7 +34,9 @@ class GoogleLogin extends React.Component {
         if (!result.status) return;
 
         let accessToken = result.accessToken;
-        console.log(accessToken);
+        
+        
+        //userServiceGoogle
     }
 
     launchGoogleLogin() {
@@ -49,13 +51,20 @@ class GoogleLogin extends React.Component {
     render() {
         const { user, users } = this.props;
         return (
-            <div>
+            <span>
                 <button onClick={this.launchGoogleLogin}
-                >Log in with Google!</button>
-            </div>
+                        className="btn btn-primary"
+                        style={styles}>
+                        Log in with Google!
+                </button>
+            </span>
         );
     }
 }
+
+const styles = {
+
+};
 
 function mapStateToProps(state) {
     const { loggingIn } = state.authentication;
