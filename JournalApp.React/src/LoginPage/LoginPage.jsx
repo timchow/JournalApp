@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { GoogleLogin } from '../SocialLogins/GoogleLogin';
 
 import { userActions } from '../_actions';
 
@@ -42,6 +43,7 @@ class LoginPage extends React.Component {
         const { username, password, submitted } = this.state;
         return (
             <div className="col-md-6 col-md-offset-3">
+                <GoogleLogin />
                 <div className="alert alert-info">
                     Username: test<br />
                     Password: test
