@@ -16,22 +16,24 @@ function login(accessToken) {
         body: JSON.stringify({ accessToken })
     };
 
-    return fetch('http://localhost:61121/api/auth/loginGoogle', requestOptions)
+    return fetch('http://localhost:61121/api/auth/login/Google', requestOptions)
         .then(response => {
             if (!response.ok) { 
                 return Promise.reject(response.statusText);
             }
             return response.json();
         })
-        .then(user => {
+        .then(data => {
             // login successful if there's a jwt token in the response
-            if (user && user.auth_token) {
+            debugger;
+            let tokenInfo = data[0];
+            let userInfo = data[1];
+            if (tokenInfo && tokenInfo.auth_token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                debugger
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(tokenInfo));
             }
 
-            return user;
+            return userInfo;
         });
 }
 

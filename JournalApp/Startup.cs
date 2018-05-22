@@ -35,7 +35,7 @@ namespace JournalApp
 			{
 				app.UseDeveloperExceptionPage();
 			}
-
+			app.UseCors("AllowAllHeaders");
 			app.UseAuthentication();
 			app.UseMvc();
 		}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { userActions } from '../../_actions';
+import { userActionsGoogle } from '../../_actions';
 
 class GoogleLogin extends React.Component {
 
@@ -33,10 +33,16 @@ class GoogleLogin extends React.Component {
 
         if (!result.status) return;
 
-        let accessToken = result.accessToken;
+        this.setState({accessToken: result.accessToken});
         
+        const { accessToken } = this.state;
+        const { dispatch } = this.props;
+
+        if (accessToken) {
+            dispatch(userActionsGoogle.login(accessToken));
+            console.log(accessToken);
+        }
         
-        //userServiceGoogle
     }
 
     launchGoogleLogin() {

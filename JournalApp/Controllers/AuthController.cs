@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using JournalApp.Auth;
 using JournalApp.Models;
 using JournalApp.Models.AccessTokens;
@@ -76,8 +77,9 @@ namespace JournalApp.Controllers
 			}
 
 			var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id), _jwtFactory, localUser.UserName, _jwtOptions);
+			object test = new List<object> {jwt, localUser};
 
-			return new OkObjectResult(jwt);
+			return new OkObjectResult(test);
 		}
 
 		// POST api/auth/login

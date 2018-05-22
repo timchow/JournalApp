@@ -6,7 +6,7 @@ import { userActions } from '../_actions';
 
 class HomePage extends React.Component {
     componentDidMount() {
-        this.props.dispatch(userActions.getAll());
+        //this.props.dispatch(userActions.getAll());
     }
 
     handleDeleteUser(id) {
@@ -15,11 +15,11 @@ class HomePage extends React.Component {
 
     render() {
         const { user, users } = this.props;
+        
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h1>Hi {user.firstName}!</h1>
                 <p>You're logged in with React & JWT!!</p>
-                <h3>Users from secure api end point:</h3>
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
@@ -40,6 +40,7 @@ class HomePage extends React.Component {
 }
 
 function mapStateToProps(state) {
+    debugger;
     const { users, authentication } = state;
     const { user } = authentication;
     return {
