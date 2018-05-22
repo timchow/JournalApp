@@ -39,16 +39,16 @@ namespace JournalApp.Controllers
 			// check to see if the accessToken is valid
 			HttpClient client = new HttpClient();
 			string tokenInfoRequestUrl = $"{Urls.GOOGLE_API_TOKEN_INFO}?access_token={body.AccessToken}";
-			var userAccessTokenValidationResponse = await client.GetStringAsync(tokenInfoRequestUrl);
-			var appAccessToken = JsonConvert.DeserializeObject<GoogleAccessTokenInformation>(userAccessTokenValidationResponse);
+			var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
+			var appAccessToken = JsonConvert.DeserializeObject<GoogleAccessTokenInformation>(tokenInfoResponse);
 
 			if (appAccessToken == null) return BadRequest("Invalid access token"); // TODO: Check the expiration time on the token as well
 
 			// Use the accessToken to request for the User's information
 			string userInfoRequestUrl = $"{Urls.GOOGLE_API_USER_INFO}?alt=json&access_token={body.AccessToken}";
-			var userInformationResponse =
+			var userInfoResponse =
 				await client.GetStringAsync(userInfoRequestUrl);
-			var userInfo = JsonConvert.DeserializeObject<GoogleUserInformation>(userInformationResponse);
+			var userInfo = JsonConvert.DeserializeObject<GoogleUserInformation>(userInfoResponse);
 
 			// Use the User's information to create a new User in the system
 
