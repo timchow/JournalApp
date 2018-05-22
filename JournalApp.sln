@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JournalApp.DAL", "JournalAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JournalApp.Auth", "JournalApp.Auth\JournalApp.Auth.csproj", "{E6AF8382-4AAC-481D-AE72-73994596FA5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JournalApp.Constants", "JournalApp.Constants\JournalApp.Constants.csproj", "{98AAF7A1-8A17-49BD-99F1-74E1429CA3E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JournalApp.Constants", "JournalApp.Constants\JournalApp.Constants.csproj", "{98AAF7A1-8A17-49BD-99F1-74E1429CA3E2}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "JournalApp.SQL", "JournalApp.SQL\JournalApp.SQL.sqlproj", "{20EAF0E4-14E5-4B79-9E28-124D615601A8}"
 EndProject
