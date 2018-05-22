@@ -33,7 +33,6 @@ namespace JournalApp.Controllers
 			}
 
 			var userIdentity = _mapper.Map<AppUser>(model); // Mapping from EmailRegistrationForm to AppUser model
-
 			var result = await _userManager.CreateAsync(userIdentity, model.Password);
 
 			if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);

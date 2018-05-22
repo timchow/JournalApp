@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using JournalApp.Auth;
+﻿using JournalApp.Auth;
+using JournalApp.Constants;
 using JournalApp.Models;
 using JournalApp.Models.AccessTokens;
 using JournalApp.Models.FormModels;
@@ -10,6 +9,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -36,15 +37,17 @@ namespace JournalApp.Controllers
 		public async Task<IActionResult> LoginGoogleWithAccessToken([FromBody]GoogleAccessToken body)
 		{
 			// check to see if the accessToken is valid
-			HttpClient Client = new HttpClient();
-			var userAccessTokenValidationResponse = await Client.GetStringAsync($"https://www.googleapis.com/oauth2/v3/tokeninfo?access_token={body.AccessToken}");
+			HttpClient client = new HttpClient();
+			string tokenInfoRequestUrl = $"{Urls.GOOGLE_API_TOKEN_INFO}?access_token={body.AccessToken}";
+			var userAccessTokenValidationResponse = await client.GetStringAsync(tokenInfoRequestUrl);
 			var appAccessToken = JsonConvert.DeserializeObject<GoogleAccessTokenInformation>(userAccessTokenValidationResponse);
 
 			if (appAccessToken == null) return BadRequest("Invalid access token"); // TODO: Check the expiration time on the token as well
 
 			// Use the accessToken to request for the User's information
+			string userInfoRequestUrl = $"{Urls.GOOGLE_API_USER_INFO}?alt=json&access_token={body.AccessToken}";
 			var userInformationResponse =
-				await Client.GetStringAsync($"https://www.googleapis.com/oauth2/v3/userinfo?alt=json&access_token={body.AccessToken}");
+				await client.GetStringAsync(userInfoRequestUrl);
 			var userInfo = JsonConvert.DeserializeObject<GoogleUserInformation>(userInformationResponse);
 
 			// Use the User's information to create a new User in the system
@@ -53,7 +56,7 @@ namespace JournalApp.Controllers
 
 			if (user == null)
 			{
-				var appUser = new AppUser()
+				var appUser = new AppUser
 				{
 					FirstName = userInfo.given_name,
 					LastName = userInfo.family_name,
@@ -77,9 +80,9 @@ namespace JournalApp.Controllers
 			}
 
 			var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id), _jwtFactory, localUser.UserName, _jwtOptions);
-			object test = new List<object> {jwt, localUser};
+			var response = new List<object> { jwt, localUser };
 
-			return new OkObjectResult(test);
+			return new OkObjectResult(response);
 		}
 
 		// POST api/auth/login

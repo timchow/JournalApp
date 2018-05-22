@@ -10,10 +10,4 @@ const rootReducer = combineReducers({
     alert
 });
 
-export default rootReducer;const rootReducer = combineReducers({
-    authentication,
-    users,
-    alert
-});
-
 export default rootReducer;

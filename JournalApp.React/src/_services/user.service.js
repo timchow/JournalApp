@@ -1,4 +1,6 @@
 import { authHeader } from '../_helpers';
+import { apiConstants } from '../_constants';
+import { Config } from '../../web.config';
 
 export const userService = {
     login,
@@ -14,9 +16,11 @@ function login(username, password) {
                     'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
                     'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token' },
         body: JSON.stringify({ username, password })
-    };
+	};
+	
+	const requestURL = [Config.SERVER_URL,Config.SERVER_API_BASE,apiConstants.USER_LOGIN_URL].join('/');
 
-    return fetch('http://localhost:61121/api/auth/login', requestOptions)
+    return fetch(requestURL, requestOptions)
         .then(response => {
             if (!response.ok) { 
                 return Promise.reject(response.statusText);

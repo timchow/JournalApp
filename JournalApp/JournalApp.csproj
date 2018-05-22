@@ -24,6 +24,7 @@
   <ItemGroup>
     <ProjectReference Include="..\JournalApp.Auth\JournalApp.Auth.csproj" />
     <ProjectReference Include="..\JournalApp.BLL\JournalApp.BLL.csproj" />
+    <ProjectReference Include="..\JournalApp.Constants\JournalApp.Constants.csproj" />
   </ItemGroup>
 
 </Project>

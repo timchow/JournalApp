@@ -19,7 +19,8 @@ module.exports = {
                 query: {
                     presets: ['react', 'es2015', 'stage-3']
                 }
-            }
+			},
+			{ test: /\.(png|jpg)$/, loader: 'url-loader?limit=8192' }
         ]
     },
     plugins: [new HtmlWebpackPlugin({
@@ -29,5 +30,5 @@ module.exports = {
     })],
     devServer: {
         historyApiFallback: true
-    }
+	}
 }

@@ -1,4 +1,6 @@
 import { authHeader } from '../_helpers';
+import { apiConstants } from '../_constants';
+import { Config } from '../../web.config';
 
 export const userServiceGoogle = {
     login,
@@ -16,7 +18,9 @@ function login(accessToken) {
         body: JSON.stringify({ accessToken })
     };
 
-    return fetch('http://localhost:61121/api/auth/login/Google', requestOptions)
+	const requestURL = [Config.SERVER_URL,Config.SERVER_API_BASE,apiConstants.USER_LOGIN_GOOGLE_URL].join('/');
+	
+    return fetch(requestURL, requestOptions)
         .then(response => {
             if (!response.ok) { 
                 return Promise.reject(response.statusText);
@@ -25,7 +29,6 @@ function login(accessToken) {
         })
         .then(data => {
             // login successful if there's a jwt token in the response
-            debugger;
             let tokenInfo = data[0];
             let userInfo = data[1];
             if (tokenInfo && tokenInfo.auth_token) {
