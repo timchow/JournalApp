@@ -1,0 +1,249 @@
+{
+	"id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+	"name": "Journal Application",
+	"description": "",
+	"order": [
+		"b9fdab95-72dc-308f-28c2-daa055feb5be",
+		"22201af4-8ac4-0c86-c99c-39dd4b68c4d1",
+		"d543130d-ec0b-8d92-7b8c-2075f8157f55",
+		"afbd91b2-11b0-fca6-c06c-2af0c80d12c9",
+		"223d8dcc-fb17-e611-309d-b439f3579179",
+		"2e48d627-0560-7551-dd47-4d42025954fc",
+		"d41c8766-0f03-2c4b-6c95-34111592e279",
+		"716012ff-ce4e-512a-ae0b-61f422c9e8e5",
+		"702e8dc3-850b-75bd-b2f1-09747f413206",
+		"cf7a6728-b0c8-9f11-eec3-e3842ba76d37",
+		"921c6b83-02b0-470f-9275-0946ace07ae2"
+	],
+	"folders": [],
+	"folders_order": [],
+	"timestamp": 0,
+	"owner": 0,
+	"public": false,
+	"requests": [
+		{
+			"id": "22201af4-8ac4-0c86-c99c-39dd4b68c4d1",
+			"name": "GET_Journal/{journalId}/Page",
+			"description": "",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "GET",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/Journal/1/Page",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "223d8dcc-fb17-e611-309d-b439f3579179",
+			"name": "DELETE_Page/{pageId}/BulletPoint/{bulletPointId}",
+			"description": "Deletes a Bullet Point given a PageId and BulletPointId",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "DELETE",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/Page/5/BulletPoint/11",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "2e48d627-0560-7551-dd47-4d42025954fc",
+			"name": "POST_Journal/{journalId}/Page",
+			"description": "Updates a Page given a journal",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "POST",
+			"headers": "Content-Type: application/json",
+			"dataMode": "raw",
+			"data": [],
+			"rawModeData": "{\n\t\"Title\": \"update from postmin1\"\n}",
+			"url": "{{domain}}/api/Journal/4/Page",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "702e8dc3-850b-75bd-b2f1-09747f413206",
+			"name": "DELETE_User/{userId}/Journal{journalId}",
+			"description": "",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "DELETE",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/User/11/Journal/5",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "716012ff-ce4e-512a-ae0b-61f422c9e8e5",
+			"name": "POST_User/{userId}/Journal/{journalId?}",
+			"description": "",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "POST",
+			"headers": "Content-Type: application/json",
+			"dataMode": "raw",
+			"data": [],
+			"rawModeData": "{\n\t\"Title\": \"postman title3\",\n\t\"Description\": \"test desp\"\n}",
+			"url": "{{domain}}/api/User/11/Journal/5",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "921c6b83-02b0-470f-9275-0946ace07ae2",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{domain}}/api/auth/login",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"data": [],
+			"dataMode": "raw",
+			"name": "Auth/login",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527005483723,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"userName\": \"tchow@gmail.com\",\n\t\"password\": \"password\"\n}"
+		},
+		{
+			"id": "afbd91b2-11b0-fca6-c06c-2af0c80d12c9",
+			"name": "POST_Page/{pageId}/BulletPoint/{bulletPointId?}",
+			"description": "Updates the BulletPoint {bulletPointId} entry on Page {pageId} ",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "POST",
+			"headers": "Content-Type: application/json",
+			"dataMode": "raw",
+			"data": [],
+			"rawModeData": "{\n\t\"Content\": \"populating.....\",\n\t\"PageId\": 5\n}",
+			"url": "{{domain}}/api/Page/3/BulletPoint/11",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json"
+				}
+			],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "b9fdab95-72dc-308f-28c2-daa055feb5be",
+			"name": "GET_Page/{pageId}/BulletPoint",
+			"description": "Gets all BulletPoint objects given a {pageId}",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "GET",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/Page/2/BulletPoint",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "cf7a6728-b0c8-9f11-eec3-e3842ba76d37",
+			"headers": "Content-Type: application/json\n",
+			"headerData": [
+				{
+					"key": "Content-Type",
+					"value": "application/json",
+					"description": "",
+					"enabled": true
+				}
+			],
+			"url": "{{domain}}/api/auth/login/Google",
+			"queryParams": [],
+			"pathVariables": {},
+			"pathVariableData": [],
+			"preRequestScript": null,
+			"method": "POST",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"data": [],
+			"dataMode": "raw",
+			"name": "POST_Auth/login/Google",
+			"description": "",
+			"descriptionFormat": "html",
+			"time": 1527005463988,
+			"version": 2,
+			"responses": [],
+			"tests": null,
+			"currentHelper": "normal",
+			"helperAttributes": {},
+			"rawModeData": "{\n\t\"accessToken\": \"ya29.GlzDBYNpeU8lU5p_KSE69H8SSr4po3IDSt1o7vmKfREptJhR_WBB20_KPFppEwOSLyrG1JH61WTOgIyRnOJjd4zWoQ78bEAtUVOgy_Hmyl3DiJ5m6uvbO5d7v-tp_g\"\n}"
+		},
+		{
+			"id": "d41c8766-0f03-2c4b-6c95-34111592e279",
+			"name": "DELETE_Journal/{journalId}/Page/{pageId}",
+			"description": "",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "DELETE",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/Journal/4/Page/9",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		},
+		{
+			"id": "d543130d-ec0b-8d92-7b8c-2075f8157f55",
+			"name": "GET_User/11/Journal",
+			"description": "Gets all Journal objects for a User",
+			"collectionId": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9",
+			"method": "GET",
+			"headers": "",
+			"data": [],
+			"rawModeData": "",
+			"url": "{{domain}}/api/User/11/Journal",
+			"responses": [],
+			"pathVariableData": [],
+			"queryParams": [],
+			"headerData": [],
+			"collection_id": "b9559adf-6e5a-92dd-908d-f889c3a1c2d9"
+		}
+	]
+}
