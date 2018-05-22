@@ -22,7 +22,7 @@ function login(username, password) {
 
     return fetch(requestURL, requestOptions)
         .then(response => {
-            if (!response.ok) { 
+            if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
             return response.json();

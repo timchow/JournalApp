@@ -1,4 +1,4 @@
-import { userConstants } from '../_constants';
+import { userConstants, messageConstants } from '../_constants';
 import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
@@ -21,7 +21,7 @@ function login(username, password) {
                 },
                 error => {
                     dispatch(failure(error));
-                    dispatch(alertActions.error(error));
+                    dispatch(alertActions.error(messageConstants.SERVER_DOWN));
                 }
             );
     };

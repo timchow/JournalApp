@@ -67,6 +67,7 @@
     <Folder Include="Security" />
     <Folder Include="dbo\Tables" />
     <Folder Include="dbo\Stored Procedures" />
+    <Folder Include="Backups" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Scripts\ScriptsIgnoredOnImport.sql" />
@@ -95,5 +96,6 @@
     <None Include="obj\Debug\JournalApp.SQL.sqlproj.FileListAbsolute.txt" />
     <None Include="obj\Debug\JournalApp.SQL.sqlprojAssemblyReference.cache" />
     <None Include="obj\Debug\Model.xml" />
+    <None Include="Backups\JournalApplication_DEV.bak" />
   </ItemGroup>
 </Project>
