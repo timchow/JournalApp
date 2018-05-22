@@ -35,8 +35,6 @@ namespace JournalApp.Migrations
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<long?>("FacebookId");
-
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
@@ -60,6 +58,8 @@ namespace JournalApp.Migrations
                     b.Property<string>("PictureUrl");
 
                     b.Property<string>("SecurityStamp");
+
+                    b.Property<string>("SocialId");
 
                     b.Property<bool>("TwoFactorEnabled");
 

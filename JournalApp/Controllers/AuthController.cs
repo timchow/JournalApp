@@ -60,7 +60,7 @@ namespace JournalApp.Controllers
 				{
 					FirstName = userInfo.given_name,
 					LastName = userInfo.family_name,
-					FacebookId = 999,
+					SocialId = userInfo.sub,
 					Email = userInfo.email,
 					UserName = userInfo.email,
 					PictureUrl = userInfo.picture
