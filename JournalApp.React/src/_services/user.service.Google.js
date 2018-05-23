@@ -11,18 +11,20 @@ export const userServiceGoogle = {
 function login(accessToken) {
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token' },
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+        },
         body: JSON.stringify({ accessToken })
     };
 
-	const requestURL = [Config.SERVER_URL,Config.SERVER_API_BASE,apiConstants.USER_LOGIN_GOOGLE_URL].join('/');
-	
+    const requestURL = [Config.SERVER_URL, Config.SERVER_API_BASE, apiConstants.USER_LOGIN_GOOGLE_URL].join('/');
+
     return fetch(requestURL, requestOptions)
         .then(response => {
-            if (!response.ok) { 
+            if (!response.ok) {
                 return Promise.reject(response.statusText);
             }
             return response.json();
@@ -55,7 +57,7 @@ function getAll() {
 }
 
 function handleResponse(response) {
-    if (!response.ok) { 
+    if (!response.ok) {
         return Promise.reject(response.statusText);
     }
 

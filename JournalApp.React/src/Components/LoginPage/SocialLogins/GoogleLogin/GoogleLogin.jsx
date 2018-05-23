@@ -74,7 +74,6 @@ class GoogleLogin extends React.Component {
 				<img src={logo}>
 				</img>
 			</a>
-
 		);
 	}
 }

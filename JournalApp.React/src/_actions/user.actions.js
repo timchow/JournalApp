@@ -5,29 +5,35 @@ import { history } from '../_helpers';
 
 export const userActions = {
     login,
-	logout,
-	signup,
+    logout,
+    signup,
     getAll
 };
 
 function signup(user) {
-	return dispatch => {
-		dispatch(request(user));
+    return dispatch => {
+        dispatch(request(user));
 
-		userService.signup(user)
-			.then(user => {
-				dispatch(success(user));
-				history.push('/login');
-			},
-			error => {
-				dispatch(failure(error));
-                dispatch(alertActions.error(messageConstants.SERVER_DOWN));
-			});
-	};
+        userService.signup(user)
+            .then(user => {
+                    dispatch(success(user));
+                    history.push('/login');
+                },
+                error => {
+                    error.then(error => {
+                        if (error.length) {
+                            dispatch(failure(error[0]));
+                            dispatch(alertActions.error(error[0].description));
+                        }
+                    })
+                });
+    };
 
 
-	function request(user) { return { type: userConstants.SIGNUP_REQUEST, user } }
+    function request(user) { return { type: userConstants.SIGNUP_REQUEST, user } }
+
     function success(user) { return { type: userConstants.SIGNUP_SUCCESS, user } }
+
     function failure(error) { return { type: userConstants.SIGNUP_FAILURE, error } }
 }
 
@@ -37,7 +43,7 @@ function login(username, password) {
 
         userService.login(username, password)
             .then(
-                user => { 
+                user => {
                     dispatch(success(user));
                     history.push('/');
                 },
@@ -49,7 +55,9 @@ function login(username, password) {
     };
 
     function request(user) { return { type: userConstants.LOGIN_REQUEST, user } }
+
     function success(user) { return { type: userConstants.LOGIN_SUCCESS, user } }
+
     function failure(error) { return { type: userConstants.LOGIN_FAILURE, error } }
 }
 
@@ -70,6 +78,8 @@ function getAll() {
     };
 
     function request() { return { type: userConstants.GETALL_REQUEST } }
+
     function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
+
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }

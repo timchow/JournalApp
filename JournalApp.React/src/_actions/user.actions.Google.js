@@ -13,17 +13,19 @@ function login(accessToken) {
         dispatch(request({ accessToken }));
 
         userServiceGoogle.login(accessToken).then(user => {
-            dispatch(success(user));
-            history.push('/');
-        },
-        error => {
-            dispatch(failure(error));
-            dispatch(alertActions.error(error));
-        });
+                dispatch(success(user));
+                history.push('/');
+            },
+            error => {
+                dispatch(failure(error));
+                dispatch(alertActions.error(error));
+            });
     };
 
     function request(token) { return { type: userConstants.LOGIN_REQUEST_GOOGLE, token } }
+
     function success(user) { return { type: userConstants.LOGIN_SUCCESS_GOOGLE, user } }
+
     function failure(error) { return { type: userConstants.LOGIN_FAILURE_GOOGLE, error } }
 }
 
