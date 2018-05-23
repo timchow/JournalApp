@@ -13,7 +13,13 @@ export function authentication(state = initialState, action) {
 				loggingIn: true,
 				user: action.user
 			};
+
+		case userConstants.LOGIN_REQUEST_GOOGLE:
+			return {
+				loggingIn: true
+			};
 		case userConstants.LOGIN_SUCCESS:
+		case userConstants.LOGIN_SUCCESS_GOOGLE:
 			return {
 				loggedIn: true,
 				user: action.user
@@ -22,15 +28,16 @@ export function authentication(state = initialState, action) {
 		case userConstants.LOGIN_FAILURE_GOOGLE:
 			return {};
 
-		case userConstants.LOGIN_REQUEST_GOOGLE:
+		case userConstants.SIGNUP_REQUEST:
 			return {
-				loggingIn: true
-			};
-		case userConstants.LOGIN_SUCCESS_GOOGLE:
-			return {
-				loggedIn: true,
+				signingUp: true,
 				user: action.user
-			}
+			};
+		case userConstants.SIGNUP_SUCCESS:
+			return {
+				signedUp: true,
+				user: action.user
+			};
 		case userConstants.LOGOUT:
 			return {};
 		default:

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../_actions';
+import { userActions } from '../../_actions';
 
 class SignUpPage extends React.Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class SignUpPage extends React.Component {
 				lastName: '',
 				location: '',
 			},
-            submitted: false
+			submitted: false
 		};
 		
 		this.handleChange = this.handleChange.bind(this);
@@ -48,6 +48,7 @@ class SignUpPage extends React.Component {
     }
 
     render() {
+		const { signingIn } = this.props;
         const { user, submitted } = this.state;
 
         return (
@@ -101,9 +102,9 @@ class SignUpPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { loggingIn } = state.authentication;
+    const { signingUp } = state.authentication;
     return {
-        loggingIn
+        signingUp
     };
 }
 

@@ -5,10 +5,10 @@ import { connect } from 'react-redux';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
-import { HomePage } from '../HomePage';
-import { LoginPage } from '../LoginPage';
-import { SignUpPage } from '../SignUpPage';
-import { GoogleAuth } from '../SocialAuths/GoogleAuth';
+import { HomePage } from '../Components/HomePage';
+import { LoginPage } from '../Components/LoginPage';
+import { SignUpPage } from '../Components/SignUpPage';
+import { GoogleAuth } from '../Components/LoginPage/SocialLogins/GoogleLogin/GoogleAuth';
 
 class App extends React.Component {
     constructor(props) {

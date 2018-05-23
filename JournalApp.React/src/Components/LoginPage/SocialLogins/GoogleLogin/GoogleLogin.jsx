@@ -2,9 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { userActionsGoogle } from '../../_actions';
-import { apiConstants } from '../../_constants';
-import { Config } from '../../../web.config';
+import { userActionsGoogle } from '../../../../_actions';
+import { apiConstants } from '../../../../_constants';
+import { Config } from '../../../../../web.config';
 import logo from './btn_google_signin_light_normal_web.png';
 
 class GoogleLogin extends React.Component {

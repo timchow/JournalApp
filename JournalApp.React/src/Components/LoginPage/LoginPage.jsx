@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { GoogleLogin } from '../SocialLogins/GoogleLogin';
+import { GoogleLogin } from './SocialLogins/GoogleLogin';
 
-import { userActions } from '../_actions';
+import { userActions } from '../../_actions';
 
 class LoginPage extends React.Component {
     constructor(props) {
