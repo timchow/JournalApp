@@ -5,9 +5,31 @@ import { history } from '../_helpers';
 
 export const userActions = {
     login,
-    logout,
+	logout,
+	signup,
     getAll
 };
+
+function signup(user) {
+	return dispatch => {
+		dispatch(request(user));
+
+		userService.signup(user)
+			.then(user => {
+				dispatch(success(user));
+				history.push('/login');
+			},
+			error => {
+				dispatch(failure(error));
+                dispatch(alertActions.error(messageConstants.SERVER_DOWN));
+			});
+	};
+
+
+	function request(user) { return { type: userConstants.SIGNUP_REQUEST, user } }
+    function success(user) { return { type: userConstants.SIGNUP_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.SIGNUP_FAILURE, error } }
+}
 
 function login(username, password) {
     return dispatch => {

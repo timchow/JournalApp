@@ -80,7 +80,7 @@ class GoogleLogin extends React.Component {
 }
 
 const styles = {
-	margin: '10px'
+	//margin: '10px'
 };
 
 function mapStateToProps(state) {

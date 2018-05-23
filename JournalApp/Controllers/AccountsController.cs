@@ -25,19 +25,19 @@ namespace JournalApp.Controllers
 
 		// POST api/accounts
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody]EmailRegistrationForm model)
+		public async Task<IActionResult> Post([FromBody]EmailRegistrationForm user)
 		{
 			if (!ModelState.IsValid)
 			{
 				return BadRequest(ModelState);
 			}
 
-			var userIdentity = _mapper.Map<AppUser>(model); // Mapping from EmailRegistrationForm to AppUser model
-			var result = await _userManager.CreateAsync(userIdentity, model.Password);
+			var userIdentity = _mapper.Map<AppUser>(user); // Mapping from EmailRegistrationForm to AppUser model
+			var result = await _userManager.CreateAsync(userIdentity, user.Password);
 
 			if (!result.Succeeded) return new BadRequestObjectResult(result.Errors);
 
-			await _appDbContext.Customers.AddAsync(new Customer { IdentityId = userIdentity.Id, Location = model.Location });
+			await _appDbContext.JournalOwners.AddAsync(new JournalOwner { IdentityId = userIdentity.Id, Location = user.Location });
 			await _appDbContext.SaveChangesAsync();
 
 			return new OkObjectResult("Account created");

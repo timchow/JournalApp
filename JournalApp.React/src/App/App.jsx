@@ -7,6 +7,7 @@ import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { LoginPage } from '../LoginPage';
+import { SignUpPage } from '../SignUpPage';
 import { GoogleAuth } from '../SocialAuths/GoogleAuth';
 
 class App extends React.Component {
@@ -34,6 +35,7 @@ class App extends React.Component {
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <Route path="/login" component={LoginPage} />
                                 <Route path="/GoogleAuth" component={GoogleAuth} />
+								<Route path="/signup" component={SignUpPage} />
                             </div>
                         </Router>
                     </div>

@@ -11,6 +11,6 @@ namespace JournalApp.DAL
 		{
 		}
 
-		public DbSet<Customer> Customers { get; set; }
+		public DbSet<JournalOwner> JournalOwners { get; set; }
 	}
 }

@@ -1,6 +1,6 @@
 ﻿namespace JournalApp.Models
 {
-	public class Customer
+	public class JournalOwner
 	{
 		public string Gender { get; set; }
 		public int Id { get; set; }

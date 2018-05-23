@@ -4,38 +4,51 @@ import { Config } from '../../web.config';
 
 export const userService = {
     login,
-    logout,
+	logout,
+	signup,
     getAll
 };
 
 function login(username, password) {
+	let data = {
+		username,
+		password
+	};
+
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-                    'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token' },
-        body: JSON.stringify({ username, password })
+        headers: getLooseHeaders(),
+        body: JSON.stringify(data)
 	};
 	
 	const requestURL = [Config.SERVER_URL,Config.SERVER_API_BASE,apiConstants.USER_LOGIN_URL].join('/');
 
     return fetch(requestURL, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response.statusText);
-            }
-            return response.json();
-        })
-        .then(user => {
+        .then(handleResponse)
+        .then(data => {
             // login successful if there's a jwt token in the response
-            if (user && user.auth_token) {
+            let tokenInfo = data[0];
+            let userInfo = data[1];
+            if (tokenInfo && tokenInfo.auth_token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(user));
+                localStorage.setItem('user', JSON.stringify(tokenInfo));
             }
 
-            return user;
+            return userInfo;
         });
+}
+
+function signup(user) {
+	const requestOptions = {
+        method: 'POST',
+        headers: getLooseHeaders(),
+        body: JSON.stringify(user)
+	};
+
+	const requestURL = [Config.SERVER_URL,Config.SERVER_API_BASE,apiConstants.USER_SIGNUP_URL].join('/');
+
+	return fetch(requestURL,requestOptions)
+		.then(handleResponse);
 }
 
 function logout() {
@@ -58,4 +71,13 @@ function handleResponse(response) {
     }
 
     return response.json();
+}
+
+function getLooseHeaders() {
+	return {
+		'Content-Type': 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET, POST, PATCH, PUT, DELETE, OPTIONS',
+		'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token'
+	};
 }

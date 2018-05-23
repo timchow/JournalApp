@@ -29,7 +29,7 @@ class LoginPage extends React.Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
+		console.log(process)
         this.setState({ submitted: true });
         const { username, password } = this.state;
         const { dispatch } = this.props;
@@ -63,6 +63,7 @@ class LoginPage extends React.Component {
                     </div>
                     <div className="form-group">
                         <button className="btn btn-primary">Login</button>
+						<Link to="/signup" className="btn btn-link">Register</Link>
 						<GoogleLogin />
                         
                         {loggingIn &&

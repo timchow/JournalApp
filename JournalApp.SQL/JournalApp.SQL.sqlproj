@@ -96,6 +96,6 @@
     <None Include="obj\Debug\JournalApp.SQL.sqlproj.FileListAbsolute.txt" />
     <None Include="obj\Debug\JournalApp.SQL.sqlprojAssemblyReference.cache" />
     <None Include="obj\Debug\Model.xml" />
-    <None Include="Backups\JournalApplication_DEV.bak" />
+    <None Include="Backups\JournalApplication_DEV_5.22.2018.bak" />
   </ItemGroup>
 </Project>
