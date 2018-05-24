@@ -89,7 +89,72 @@ namespace JournalApp.Controllers
 			}
 
 			var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id), _jwtFactory, localUser.UserName, _jwtOptions);
-			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(user);
+			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(localUser);
+			var response = new List<object> { jwt, basicUserInfo };
+
+			return new OkObjectResult(response);
+		}
+
+		[HttpPost("login/Facebook")]
+		[EnableCors("AllowAllHeaders")]
+		public async Task<IActionResult> LoginFacebookWithAccessToken([FromBody]GoogleAccessToken body)
+		{
+			// check to see if the accessToken is valid
+			HttpClient client = new HttpClient();
+
+			// 1.generate an app access token
+			string clientId = "1702234556491941";
+			string appSecret = "d0534ea71081814ed505dba44ff423b6";
+			string appAccessTokenRequestUrl = $"{Urls.FACEBOOK_API_TOKEN_ACCESS}?client_id={clientId}&client_secret={appSecret}&grant_type=client_credentials";
+			var appAccessTokenResponse = await client.GetStringAsync(appAccessTokenRequestUrl);
+			var appAccessToken = JsonConvert.DeserializeObject<FacebookAccessToken>(appAccessTokenResponse);
+
+			// 2. validate the user access token
+			string tokenInfoRequestUrl =
+				$"{Urls.FACEBOOK_API_TOKEN_VALIDATION}?input_token={body.AccessToken}&access_token={appAccessToken.access_token}";
+			var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
+			var tokenInfo = JsonConvert.DeserializeObject<FacebookAccessTokenInformation>(tokenInfoResponse);
+
+			if (!tokenInfo.data.is_valid) return BadRequest("Token is not valid");
+
+			string userInfoRequestUrl = $"{Urls.FACEBOOK_API_USER_INFO}?fields=id,email,first_name,last_name,name,gender,locale,birthday,picture&access_token={body.AccessToken}";
+			var userInfoResponse = await client.GetStringAsync(userInfoRequestUrl);
+			var userInfo = JsonConvert.DeserializeObject<FacebookUserInfo>(userInfoResponse);
+
+			// Use the User's information to create a new AppUser in the system
+
+			var user = await _userManager.FindByEmailAsync(userInfo.email);
+
+			if (user == null)
+			{
+				var appUser = new AppUser
+				{
+					FirstName = userInfo.first_name,
+					LastName = userInfo.last_name,
+					SocialId = userInfo.id,
+					Email = userInfo.email,
+					UserName = userInfo.email,
+					PictureUrl = userInfo.picture != null && userInfo.picture.data != null ? userInfo.picture.data.url : ""
+				};
+
+				var result =
+					await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));
+
+				if (!result.Succeeded) return new BadRequestObjectResult("Error creating User!");
+
+				await _appDbContext.JournalOwners.AddAsync(new JournalOwner { IdentityId = appUser.Id });
+				await _appDbContext.SaveChangesAsync();
+			}
+
+			var localUser = await _userManager.FindByNameAsync(userInfo.email);
+
+			if (localUser == null)
+			{
+				return BadRequest("Could not find user in the DB");
+			}
+
+			var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id), _jwtFactory, localUser.UserName, _jwtOptions);
+			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(localUser);
 			var response = new List<object> { jwt, basicUserInfo };
 
 			return new OkObjectResult(response);

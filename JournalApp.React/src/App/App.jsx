@@ -9,6 +9,7 @@ import { HomePage } from '../Components/HomePage';
 import { LoginPage } from '../Components/LoginPage';
 import { SignUpPage } from '../Components/SignUpPage';
 import { GoogleAuth } from '../Components/LoginPage/SocialLogins/GoogleLogin/GoogleAuth';
+import { FacebookAuth } from '../Components/LoginPage/SocialLogins/FacebookLogin/FacebookAuth';
 
 class App extends React.Component {
 	constructor(props) {
@@ -35,6 +36,7 @@ class App extends React.Component {
 								<PrivateRoute exact path="/" component={HomePage} />
 								<Route path="/login" component={LoginPage} />
 								<Route path="/GoogleAuth" component={GoogleAuth} />
+								<Route path="/FacebookAuth" component={FacebookAuth} />
 								<Route path="/signup" component={SignUpPage} />
 							</div>
 						</Router>

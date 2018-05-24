@@ -1,4 +1,4 @@
-﻿namespace JournalApp.Models.AccessTokens
+﻿namespace JournalApp.Models
 {
 	public class GoogleUserInfo
 	{
