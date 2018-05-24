@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace JournalApp.Migrations
 {
-    public partial class initial : Migration
+    public partial class initialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -32,7 +32,6 @@ namespace JournalApp.Migrations
                     ConcurrencyStamp = table.Column<string>(nullable: true),
                     Email = table.Column<string>(maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(nullable: false),
-                    FacebookId = table.Column<long>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
@@ -44,6 +43,7 @@ namespace JournalApp.Migrations
                     PhoneNumberConfirmed = table.Column<bool>(nullable: false),
                     PictureUrl = table.Column<string>(nullable: true),
                     SecurityStamp = table.Column<string>(nullable: true),
+                    SocialId = table.Column<string>(nullable: true),
                     TwoFactorEnabled = table.Column<bool>(nullable: false),
                     UserName = table.Column<string>(maxLength: 256, nullable: true)
                 },
@@ -159,7 +159,7 @@ namespace JournalApp.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customers",
+                name: "JournalOwners",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -171,9 +171,9 @@ namespace JournalApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customers", x => x.Id);
+                    table.PrimaryKey("PK_JournalOwners", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Customers_AspNetUsers_IdentityId",
+                        name: "FK_JournalOwners_AspNetUsers_IdentityId",
                         column: x => x.IdentityId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -220,8 +220,8 @@ namespace JournalApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customers_IdentityId",
-                table: "Customers",
+                name: "IX_JournalOwners_IdentityId",
+                table: "JournalOwners",
                 column: "IdentityId");
         }
 
@@ -243,7 +243,7 @@ namespace JournalApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Customers");
+                name: "JournalOwners");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

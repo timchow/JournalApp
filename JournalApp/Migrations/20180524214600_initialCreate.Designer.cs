@@ -11,8 +11,8 @@ using System;
 namespace JournalApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180523161052_ChangeCustomerToJournalOwner")]
-    partial class ChangeCustomerToJournalOwner
+    [Migration("20180524214600_initialCreate")]
+    partial class initialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
