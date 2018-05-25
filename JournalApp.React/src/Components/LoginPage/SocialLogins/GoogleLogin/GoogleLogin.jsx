@@ -12,6 +12,7 @@ class GoogleLogin extends React.Component {
 	constructor() {
 		super();
 		this.popup = {};
+		this.launchGoogleLogin
 		this.launchGoogleLogin = this.launchGoogleLogin.bind(this);
 		this.handleMessage = this.handleMessage.bind(this);
 	}
@@ -23,11 +24,15 @@ class GoogleLogin extends React.Component {
 		} else {
 		}
 	}
+	componentWillUnmount() {
+		window.removeEventListener('message', this.handleMessage);
+	}
 
 	handleMessage(e) {
 		// Only handle messages coming from the Auth window
+
 		if (e && e.source && e.source.location &&
-			e.source.location.pathname !== "/GoogleAuth") {
+			e.source.location.pathname !== Config.GOOGLE.REDIRECT_PATH) {
 			return;
 		}
 
@@ -48,10 +53,14 @@ class GoogleLogin extends React.Component {
 	}
 
 	launchGoogleLogin() {
-		let client_id = Config.GOOGLE.API_CLIENT_ID;
-		let scopes = Config.GOOGLE.SCOPES;
-		let redirect_uri = Config.GOOGLE.REDIRECT_URI;
-		let url = this.getGoogleAuthUrl(client_id, scopes, redirect_uri);
+		let client_id = Config.GOOGLE.API_CLIENT_ID,
+			scopes = Config.GOOGLE.SCOPES,
+			redirect_uri = Config.GOOGLE.REDIRECT_URI,
+			url = this.getGoogleAuthUrl(client_id, scopes, redirect_uri);
+
+		if (Config.MOCK.ON) {
+			url = `${Config.GOOGLE.REDIRECT_URI}#access_token=${Config.MOCK.TOKEN}`;
+		}
 
 		this.popup = window.open(url, null, 'width=600,height=400');
 	}

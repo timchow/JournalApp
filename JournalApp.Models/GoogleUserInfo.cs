@@ -2,6 +2,21 @@
 {
 	public class GoogleUserInfo
 	{
+		public GoogleUserInfo(bool isMockuser)
+		{
+			if (isMockuser)
+			{
+				email = "mock@mock.com";
+				email_verified = true;
+				family_name = "Mockerson";
+				given_name = "Mockal";
+				locale = "en";
+				name = "Mockal Mockerson";
+				picture = "MockPictureUrl.png";
+				sub = "MockSocialID";
+			}
+		}
+
 		public string email { get; set; }
 		public bool email_verified { get; set; }
 		public string family_name { get; set; }

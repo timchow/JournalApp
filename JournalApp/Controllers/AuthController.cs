@@ -30,6 +30,8 @@ namespace JournalApp.Controllers
 		private readonly JwtIssuerOptions _jwtOptions;
 		private readonly IMapper _mapper;
 		private readonly UserManager<AppUser> _userManager;
+		private readonly bool MockOn;
+		private readonly string MockToken;
 
 		public AuthController(UserManager<AppUser> userManager, IJwtFactory jwtFactory, IOptions<JwtIssuerOptions> jwtOptions, ApplicationDbContext appDbContext, IMapper mapper,
 			IConfiguration appSettings) : base(appSettings)
@@ -39,50 +41,59 @@ namespace JournalApp.Controllers
 			_jwtOptions = jwtOptions.Value;
 			_appDbContext = appDbContext;
 			_mapper = mapper;
+			MockOn = bool.Parse(Settings.GetSection("MOCK").GetSection("ON").Value);
+			MockToken = Settings.GetSection("MOCK").GetSection("TOKEN").Value;
 		}
 
 		[HttpPost("login/Facebook")]
 		[EnableCors("AllowAllHeaders")]
 		public async Task<IActionResult> LoginFacebookWithAccessToken([FromBody]GoogleAccessToken body)
 		{
-			// check to see if the accessToken is valid
-			HttpClient client = new HttpClient();
+			FacebookUserInfo userInfo = null;
+			if (MockOn && body.AccessToken == MockToken) // get value from config file
+			{
+				userInfo = new FacebookUserInfo(isMockuser: true);
+			}
+			else
+			{
+				HttpClient client = new HttpClient();
 
-			// 1.generate an app access token
-			(string, string)[] appAccessTokenRequestParameters = {
-				("client_id", Settings.GetSection("Facebook").GetSection("ClientId").Value),
-				("client_secret", Settings.GetSection("Facebook").GetSection("ClientSecret").Value),
-				("grant_type", "client_credentials")
-			};
-			var queryParams = BuildQueryParameters(appAccessTokenRequestParameters);
+				// 1.generate an app access token
+				(string, string)[] appAccessTokenRequestParameters = {
+					("client_id", Settings.GetSection("Facebook").GetSection("ClientId").Value),
+					("client_secret", Settings.GetSection("Facebook").GetSection("ClientSecret").Value),
+					("grant_type", "client_credentials")
+				};
+				var queryParams = BuildQueryParameters(appAccessTokenRequestParameters);
 
-			string appAccessTokenRequestUrl = $"{Urls.FACEBOOK_API_TOKEN_ACCESS}?{queryParams.ToString()}";
-			var appAccessTokenResponse = await client.GetStringAsync(appAccessTokenRequestUrl);
-			var appAccessToken = JsonConvert.DeserializeObject<FacebookAccessToken>(appAccessTokenResponse);
+				string appAccessTokenRequestUrl = $"{Urls.FACEBOOK_API_TOKEN_ACCESS}?{queryParams.ToString()}";
+				var appAccessTokenResponse = await client.GetStringAsync(appAccessTokenRequestUrl);
+				var appAccessToken = JsonConvert.DeserializeObject<FacebookAccessToken>(appAccessTokenResponse);
 
-			// 2. validate the user access token
-			(string, string)[] tokenInfoRequestParameters = {
-				("input_token", body.AccessToken),
-				("access_token", appAccessToken.access_token)
-			};
+				// 2. validate the user access token
+				(string, string)[] tokenInfoRequestParameters = {
+					("input_token", body.AccessToken),
+					("access_token", appAccessToken.access_token)
+				};
 
-			queryParams = BuildQueryParameters(tokenInfoRequestParameters);
-			string tokenInfoRequestUrl = $"{Urls.FACEBOOK_API_TOKEN_VALIDATION}?{queryParams.ToString()}";
-			var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
-			var tokenInfo = JsonConvert.DeserializeObject<FacebookAccessTokenInformation>(tokenInfoResponse);
+				queryParams = BuildQueryParameters(tokenInfoRequestParameters);
+				string tokenInfoRequestUrl = $"{Urls.FACEBOOK_API_TOKEN_VALIDATION}?{queryParams.ToString()}";
+				var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
+				var tokenInfo = JsonConvert.DeserializeObject<FacebookAccessTokenInformation>(tokenInfoResponse);
 
-			if (!tokenInfo.data.is_valid) return BadRequest("Token is not valid");
+				if (!tokenInfo.data.is_valid) return BadRequest("Token is not valid");
 
-			// 3. request for user's info
-			(string, string)[] userInfoRequestParameters = {
-				("fields", "id,email,first_name,last_name,name,gender,locale,birthday,picture"),
-				("access_token", body.AccessToken)
-			};
+				// 3. request for user's info
+				(string, string)[] userInfoRequestParameters = {
+					("fields", "id,email,first_name,last_name,name,gender,locale,birthday,picture"),
+					("access_token", body.AccessToken)
+				};
 
-			queryParams = BuildQueryParameters(userInfoRequestParameters);
-			string userInfoRequestUrl = $"{Urls.FACEBOOK_API_USER_INFO}?{queryParams.ToString()}";
-			var userInfoResponse = await client.GetStringAsync(userInfoRequestUrl);
-			var userInfo = JsonConvert.DeserializeObject<FacebookUserInfo>(userInfoResponse);
+				queryParams = BuildQueryParameters(userInfoRequestParameters);
+				string userInfoRequestUrl = $"{Urls.FACEBOOK_API_USER_INFO}?{queryParams.ToString()}";
+				var userInfoResponse = await client.GetStringAsync(userInfoRequestUrl);
+				userInfo = JsonConvert.DeserializeObject<FacebookUserInfo>(userInfoResponse);
+			}
 
 			// Use the User's information to create a new AppUser in the system
 
@@ -107,33 +118,41 @@ namespace JournalApp.Controllers
 		[EnableCors("AllowAllHeaders")]
 		public async Task<IActionResult> LoginGoogleWithAccessToken([FromBody]GoogleAccessToken body)
 		{
-			// check to see if the accessToken is valid
-			HttpClient client = new HttpClient();
+			GoogleUserInfo userInfo = null;
+			if (body.AccessToken == "mock") // get value from config file
+			{
+				userInfo = new GoogleUserInfo(isMockuser:true);
+			}
+			else
+			{
+				// check to see if the accessToken is valid
+				HttpClient client = new HttpClient();
 
-			// 1. get token information and validate
-			(string, string)[] tokenInfoRequestParameters = {
-				("access_token", body.AccessToken)
-			};
+				// 1. get token information and validate
+				(string, string)[] tokenInfoRequestParameters = {
+					("access_token", body.AccessToken)
+				};
 
-			var queryParams = BuildQueryParameters(tokenInfoRequestParameters);
-			string tokenInfoRequestUrl = $"{Urls.GOOGLE_API_TOKEN_INFO}?{queryParams.ToString()}";
-			var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
-			var tokenInfo = JsonConvert.DeserializeObject<GoogleAccessTokenInformation>(tokenInfoResponse);
+				var queryParams = BuildQueryParameters(tokenInfoRequestParameters);
+				string tokenInfoRequestUrl = $"{Urls.GOOGLE_API_TOKEN_INFO}?{queryParams.ToString()}";
+				var tokenInfoResponse = await client.GetStringAsync(tokenInfoRequestUrl);
+				var tokenInfo = JsonConvert.DeserializeObject<GoogleAccessTokenInformation>(tokenInfoResponse);
 
-			if (tokenInfo == null) return BadRequest("Invalid access token"); // TODO: Check the expiration time on the token as well
+				if (tokenInfo == null) return BadRequest("Invalid access token"); // TODO: Check the expiration time on the token as well
 
-			// 2. get user's info
+				// 2. get user's info
 
-			// 3. get token information and validate
-			(string, string)[] userInfoRequestParameters = {
-				("alt", "json"),
-				("access_token", body.AccessToken)
-			};
+				// 3. get token information and validate
+				(string, string)[] userInfoRequestParameters = {
+					("alt", "json"),
+					("access_token", body.AccessToken)
+				};
 
-			queryParams = BuildQueryParameters(userInfoRequestParameters);
-			string userInfoRequestUrl = $"{Urls.GOOGLE_API_USER_INFO}?{queryParams.ToString()}";
-			var userInfoResponse = await client.GetStringAsync(userInfoRequestUrl);
-			var userInfo = JsonConvert.DeserializeObject<GoogleUserInfo>(userInfoResponse);
+				queryParams = BuildQueryParameters(userInfoRequestParameters);
+				string userInfoRequestUrl = $"{Urls.GOOGLE_API_USER_INFO}?{queryParams.ToString()}";
+				var userInfoResponse = await client.GetStringAsync(userInfoRequestUrl);
+				userInfo = JsonConvert.DeserializeObject<GoogleUserInfo>(userInfoResponse);
+			}
 
 			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(userInfo);
 
@@ -196,6 +215,8 @@ namespace JournalApp.Controllers
 		private async Task<IdentityResult> AddUserToApplication(BasicUserInfo userInfo)
 		{
 			var user = await _userManager.FindByEmailAsync(userInfo.Email);
+			IdentityResult result = null;
+
 			if (user == null)
 			{
 				var appUser = new AppUser
@@ -208,8 +229,7 @@ namespace JournalApp.Controllers
 					PictureUrl = userInfo.PictureUrl
 				};
 
-				var result =
-					await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));
+				result = await _userManager.CreateAsync(appUser, Convert.ToBase64String(Guid.NewGuid().ToByteArray()).Substring(0, 8));
 
 				if (!result.Succeeded)
 				{
@@ -220,7 +240,7 @@ namespace JournalApp.Controllers
 				await _appDbContext.SaveChangesAsync();
 			}
 
-			return null;
+			return result;
 		}
 
 		private async Task<List<object>> GenerateResponse(AppUser localUser)

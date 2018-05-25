@@ -24,10 +24,14 @@ class FacebookLogin extends React.Component {
 		}
 	}
 
+	componentWillUnmount() {
+		window.removeEventListener('message', this.handleMessage);
+	}
+
 	handleMessage(e) {
 		// Only handle messages coming from the Auth window
 		if (e && e.source && e.source.location &&
-			e.source.location.pathname !== "/FacebookAuth") {
+			e.source.location.pathname !== Config.FACEBOOK.REDIRECT_PATH) {
 			return;
 		}
 
@@ -47,10 +51,14 @@ class FacebookLogin extends React.Component {
 	}
 
 	launchFacebookLogin() {
-		let client_id = Config.FACEBOOK.API_CLIENT_ID;
-		let scopes = Config.FACEBOOK.SCOPES;
-		let redirect_uri = Config.FACEBOOK.REDIRECT_URI;
-		let url = this.getFacebookAuthUrl(client_id, scopes, redirect_uri);
+		let client_id = Config.FACEBOOK.API_CLIENT_ID,
+			scopes = Config.FACEBOOK.SCOPES,
+			redirect_uri = Config.FACEBOOK.REDIRECT_URI,
+			url = this.getFacebookAuthUrl(client_id, scopes, redirect_uri);
+
+		if (Config.MOCK.ON) {
+			url = `${Config.FACEBOOK.REDIRECT_URI}#access_token=${Config.MOCK.TOKEN}`;
+		}
 
 		this.popup = window.open(url, null, 'width=600,height=400');
 	}

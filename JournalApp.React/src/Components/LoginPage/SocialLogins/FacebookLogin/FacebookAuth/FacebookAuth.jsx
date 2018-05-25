@@ -30,7 +30,7 @@ class FacebookAuth extends React.Component {
 			message.error = getParameterByName("error");
 			message.errorDescription = getParameterByName("error_description");
 		}
-		window.opener.postMessage(JSON.stringify(message), "http://localhost:8081");
+		window.opener.postMessage(JSON.stringify(message), window.location.origin);
 	}
 
 	render() {

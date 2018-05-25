@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.IO;
 using System.Text;
 
 namespace JournalApp
@@ -24,6 +25,7 @@ namespace JournalApp
 		public Startup(IConfiguration configuration)
 		{
 			Configuration = configuration;
+			CopyMockSettingsToReactApp(@"..\JournalApp.React\web.config.js");
 		}
 
 		public IConfiguration Configuration { get; }
@@ -76,7 +78,7 @@ namespace JournalApp
 			services.AddSingleton<IJwtFactory, JwtFactory>();
 			services.AddSingleton<IConfiguration>(Configuration);
 
-			#endregion DEPENDENCY INJECTIONS - Controller
+			#endregion Dependency Injections - Controller
 
 			#region Authentication settings
 
@@ -137,5 +139,66 @@ namespace JournalApp
 			services.AddAutoMapper();
 			services.AddMvc();
 		}
+
+		#region Mock settings copy helpers
+
+		private string AddCommaIfNeeded(string settingsFile, int mockSettingsInsertIdx)
+		{
+			string secondToLastBracketToEnd = settingsFile.Substring(mockSettingsInsertIdx);
+
+			bool checkForComma = secondToLastBracketToEnd.Contains(",");
+			return !checkForComma ? settingsFile.Insert(mockSettingsInsertIdx + 1, ",") : settingsFile;
+		}
+
+		private void AddMockSettings(string settingsFile)
+		{
+			int mockSettingsInsertIdx = GetMockSettingsInsertIdx(settingsFile);
+
+			settingsFile = AddCommaIfNeeded(settingsFile, mockSettingsInsertIdx);
+			mockSettingsInsertIdx = GetMockSettingsInsertIdx(settingsFile);
+
+			var mockOn = Configuration.GetSection("MOCK").GetSection("ON").Value;
+			var mockToken = Configuration.GetSection("MOCK").GetSection("TOKEN").Value;
+			string mockText = $"MOCK: {{ ON: {mockOn.ToLower()}, TOKEN: \"{mockToken}\" }}";
+			settingsFile = settingsFile.Insert(mockSettingsInsertIdx + 1, mockText);
+			System.IO.File.WriteAllText(@"..\JournalApp.React\web.config.js", settingsFile);
+		}
+
+		private void CopyMockSettingsToReactApp(string reactWebConfigPath)
+		{
+			var settingsFile = File.ReadAllText(reactWebConfigPath);
+			bool mockSettingsExist = settingsFile.Contains("MOCK");
+
+			if (mockSettingsExist)
+			{
+				settingsFile = RemoveMockSettings(settingsFile);
+			}
+
+			AddMockSettings(settingsFile);
+		}
+
+		private int GetMockSettingsInsertIdx(string settingsFile)
+		{
+			string startToLastBracket = settingsFile.Substring(0, settingsFile.LastIndexOf("}"));
+			int startToSecondToLastBracketIdx = startToLastBracket.LastIndexOf("}");
+			string secondToLastBracketToEnd = startToLastBracket.Substring(startToSecondToLastBracketIdx);
+
+			bool checkForComma = secondToLastBracketToEnd.Contains(",");
+
+			if (checkForComma) return startToSecondToLastBracketIdx + secondToLastBracketToEnd.IndexOf(",");
+
+			return startToSecondToLastBracketIdx;
+		}
+
+		private string RemoveMockSettings(string settingsFile)
+		{
+			int mockSettingsObjectIdx = settingsFile.IndexOf("MOCK");
+			string partialSettingsFile = settingsFile.Substring(mockSettingsObjectIdx);
+			int mockSettingsBlockEndIdx = partialSettingsFile.IndexOf("}");
+
+			return settingsFile.Remove(mockSettingsObjectIdx, (mockSettingsObjectIdx + mockSettingsBlockEndIdx) - mockSettingsObjectIdx + 1);
+		}
+
+		#endregion Mock settings copy helpers
 	}
 }

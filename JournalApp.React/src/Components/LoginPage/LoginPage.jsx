@@ -71,13 +71,13 @@ class LoginPage extends React.Component {
 						}
 					</div>
 				</form>
-				<div class="row">
-					<div class="col-md-4">
+				<div className="row">
+					<div className="col-md-4">
 						<GoogleLogin />
 					</div>
-					<div class="col-md-1">
+					<div className="col-md-1">
 					</div>
-					<div class="col-md-6">
+					<div className="col-md-6">
 						<FacebookLogin />
 					</div>
 				</div>
