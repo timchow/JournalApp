@@ -1,6 +1,7 @@
 import { authHeader } from '../_helpers';
 import { apiConstants } from '../_constants';
 import { Config } from '../../web.config';
+import { serviceUtility } from './utility.service'
 
 export const userServiceFacebook = {
     login,
@@ -23,22 +24,8 @@ function login(accessToken) {
     const requestURL = [Config.SERVER_URL, Config.SERVER_API_BASE, apiConstants.USER_LOGIN_FACEBOOK_URL].join('/');
 
     return fetch(requestURL, requestOptions)
-        .then(response => {
-            if (!response.ok) {
-                return Promise.reject(response.statusText);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // login successful if there's a jwt token in the response
-
-            if (data.token && data.token.auth_token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('userData', JSON.stringify(data));
-            }
-
-            return data;
-        });
+        .then(serviceUtility.handleResponse)
+        .then(serviceUtility.handleDataResponse);
 }
 
 function logout() {
@@ -53,12 +40,4 @@ function getAll() {
     };
 
     return fetch('/users', requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-    if (!response.ok) {
-        return Promise.reject(response.statusText);
-    }
-
-    return response.json();
 }

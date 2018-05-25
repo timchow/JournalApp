@@ -25,7 +25,7 @@ namespace JournalApp.Controllers
 
 		// POST api/accounts
 		[HttpPost]
-		public async Task<IActionResult> Post([FromBody]EmailRegistrationForm user)
+		public async Task<IActionResult> SignUp([FromBody]EmailRegistrationForm user)
 		{
 			if (!ModelState.IsValid)
 			{

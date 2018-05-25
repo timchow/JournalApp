@@ -1,6 +1,7 @@
 import { authHeader } from '../_helpers';
 import { apiConstants } from '../_constants';
 import { Config } from '../../web.config';
+import { serviceUtility } from './utility.service';
 
 export const userService = {
     login,
@@ -24,17 +25,8 @@ function login(username, password) {
     const requestURL = [Config.SERVER_URL, Config.SERVER_API_BASE, apiConstants.USER_LOGIN_URL].join('/');
 
     return fetch(requestURL, requestOptions)
-        .then(handleResponse)
-        .then(data => {
-            // login successful if there's a jwt token in the response
-
-            if (data.token && data.token.auth_token) {
-                // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('userData', JSON.stringify(data));
-            }
-
-            return data;
-        });
+        .then(serviceUtility.handleResponse)
+        .then(serviceUtility.handleDataResponse);
 }
 
 function signup(user) {
@@ -47,7 +39,7 @@ function signup(user) {
     const requestURL = [Config.SERVER_URL, Config.SERVER_API_BASE, apiConstants.USER_SIGNUP_URL].join('/');
 
     return fetch(requestURL, requestOptions)
-        .then(handleResponse);
+        .then(serviceUtility.handleResponse);
 
 }
 
@@ -63,14 +55,6 @@ function getAll() {
     };
 
     return fetch('/users', requestOptions).then(handleResponse);
-}
-
-function handleResponse(response) {
-    if (!response.ok) {
-        return Promise.reject(response.json());
-    }
-
-    return response.json();
 }
 
 function getLooseHeaders() {
