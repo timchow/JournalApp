@@ -30,15 +30,14 @@ function login(accessToken) {
             return response.json();
         })
         .then(data => {
-            // login successful if there's a jwt token in the response
-            let tokenInfo = data[0];
-            let userInfo = data[1];
-            if (tokenInfo && tokenInfo.auth_token) {
+			// login successful if there's a jwt token in the response
+
+            if (data.token && data.token.auth_token) {
                 // store user details and jwt token in local storage to keep user logged in between page refreshes
-                localStorage.setItem('user', JSON.stringify(tokenInfo));
+                localStorage.setItem('userData', JSON.stringify(data));
             }
 
-            return userInfo;
+            return data;
         });
 }
 

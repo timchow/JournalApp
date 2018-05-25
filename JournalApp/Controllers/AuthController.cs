@@ -174,7 +174,7 @@ namespace JournalApp.Controllers
 		// POST api/auth/login
 		[HttpPost("login")]
 		[EnableCors("AllowAllHeaders")]
-		public async Task<IActionResult> Post([FromBody]SignInForm credentials)
+		public async Task<IActionResult> LoginWithCredentials([FromBody]SignInForm credentials)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -194,10 +194,7 @@ namespace JournalApp.Controllers
 				return BadRequest("Could not find user in the DB");
 			}
 
-			var jwt = await Tokens.GenerateJwt(identity, _jwtFactory, credentials.UserName, _jwtOptions);
-
-			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(localUser);
-			var response = new List<object> { jwt, basicUserInfo };
+			var response = await GenerateResponse(localUser);
 			return new OkObjectResult(response);
 		}
 
@@ -243,12 +240,17 @@ namespace JournalApp.Controllers
 			return result;
 		}
 
-		private async Task<List<object>> GenerateResponse(AppUser localUser)
+		private async Task<Dictionary<object, object>> GenerateResponse(AppUser localUser)
 		{
 			var jwt = await Tokens.GenerateJwt(_jwtFactory.GenerateClaimsIdentity(localUser.UserName, localUser.Id), _jwtFactory,
 				localUser.UserName, _jwtOptions);
 			BasicUserInfo basicUserInfo = _mapper.Map<BasicUserInfo>(localUser);
-			var response = new List<object> { jwt, basicUserInfo };
+
+			var response = new Dictionary<object, object>
+			{
+				{"token", jwt},
+				{"user", basicUserInfo }
+			};
 
 			return response;
 		}
