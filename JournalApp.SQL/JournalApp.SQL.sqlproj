@@ -58,11 +58,6 @@
   <ItemGroup>
     <Folder Include="Properties" />
     <Folder Include="dbo" />
-    <Folder Include="bin" />
-    <Folder Include="bin\Debug" />
-    <Folder Include="Import Script Logs" />
-    <Folder Include="obj" />
-    <Folder Include="obj\Debug" />
     <Folder Include="Scripts" />
     <Folder Include="Security" />
     <Folder Include="dbo\Tables" />
@@ -85,17 +80,9 @@
     <Build Include="dbo\Stored Procedures\PageDeleteForJournal.sql" />
     <Build Include="dbo\Stored Procedures\PageGetForJournal.sql" />
     <Build Include="dbo\Stored Procedures\PageUpsertForJournal.sql" />
+    <Build Include="Scripts\CreateScript.sql" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\JournalApp.SQL.dacpac" />
-    <None Include="bin\Debug\JournalApp.SQL.dll" />
-    <None Include="bin\Debug\JournalApp.SQL.pdb" />
-    <None Include="Import Script Logs\script106_sql_20180515102224.log" />
-    <None Include="obj\Debug\JournalApp.SQL.dll" />
-    <None Include="obj\Debug\JournalApp.SQL.pdb" />
-    <None Include="obj\Debug\JournalApp.SQL.sqlproj.FileListAbsolute.txt" />
-    <None Include="obj\Debug\JournalApp.SQL.sqlprojAssemblyReference.cache" />
-    <None Include="obj\Debug\Model.xml" />
     <None Include="Backups\JournalApplication_DEV_5.22.2018.bak" />
   </ItemGroup>
 </Project>
